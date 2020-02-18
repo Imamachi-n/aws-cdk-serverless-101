@@ -7,7 +7,7 @@ const Region = process.env.REGION!;
 
 const DYNAMO = new AWS.DynamoDB({
   apiVersion: "2012-08-10",
-  region: Region
+  region: Region,
 });
 
 export interface User {
@@ -37,7 +37,7 @@ export class HelloWorldUseCase {
   private static createMessage(userInfo: User): GreetingMessage {
     return {
       title: `hello, ${userInfo.name}`,
-      description: "my first message."
+      description: "my first message.",
     };
   }
 }
@@ -49,12 +49,12 @@ export class DynamodbGreetingTable {
       Key: { greetingId: { S: "hello-cdk-item" } },
       UpdateExpression: [
         "set title = :title",
-        "description = :description"
+        "description = :description",
       ].join(", "),
       ExpressionAttributeValues: {
         ":title": { S: greeting.title },
-        ":description": { S: greeting.description }
-      }
+        ":description": { S: greeting.description },
+      },
     };
 
     await DYNAMO.updateItem(params).promise();
