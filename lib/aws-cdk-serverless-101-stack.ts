@@ -15,14 +15,14 @@ export class AwsCdkServerless101Stack extends cdk.Stack {
     const greetingTable = new dynamodb.Table(this, "greeting", {
       partitionKey: {
         name: "greetingId",
-        type: dynamodb.AttributeType.STRING
+        type: dynamodb.AttributeType.STRING,
       },
       tableName: "greeting",
 
       // The default removal policy is RETAIN, which means that cdk destroy will not attempt to delete
       // the new table, and it will remain in your account until manually deleted. By setting the policy to
       // DESTROY, cdk destroy will delete the table (even if it has data in it)
-      removalPolicy: cdk.RemovalPolicy.DESTROY // FIXME: NOT recommended for production code
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // FIXME: NOT recommended for production code
     });
 
     // (2) Lambda Function
@@ -55,8 +55,8 @@ export class AwsCdkServerless101Stack extends cdk.Stack {
         environment: {
           GREETING_TABLE_NAME: greetingTable.tableName,
           REGION:
-            props && props.env!.region ? props.env!.region : "ap-northeast-1"
-        }
+            props && props.env!.region ? props.env!.region : "ap-northeast-1",
+        },
       }
     );
 
@@ -71,7 +71,7 @@ export class AwsCdkServerless101Stack extends cdk.Stack {
     const api = new apigateway.RestApi(this, "greetingApi", {
       // A name for the API Gateway RestApi resource.
       // https://docs.aws.amazon.com/cdk/api/latest/typescript/api/aws-apigateway/restapiprops.html#aws_apigateway_RestApiProps_restApiName
-      restApiName: "hello-cdk-greeting"
+      restApiName: "hello-cdk-greeting",
     });
 
     // Represents the root resource ("/") of this API. Use it to define the API model:
@@ -101,23 +101,23 @@ export class AwsCdkServerless101Stack extends cdk.Stack {
               // This function evaluates a JSONPath expression and returns the results as a JSON string.
               // For example, $input.json('$.pets') returns a JSON string representing the pets structure.
               // https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#input-variable-reference
-              "application/json": '$input.json("$")'
-            }
-          }
+              "application/json": '$input.json("$")',
+            },
+          },
         ],
-        // Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, 
+        // Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request,
         // and the available mapping templates specified as the requestTemplates property on the Integration resource.
         // https://docs.aws.amazon.com/cdk/api/latest/typescript/api/aws-apigateway/integrationoptions.html#aws_apigateway_IntegrationOptions_passthroughBehavior
         // Passes the request body for unmapped content types through to the integration back end without transformation.
         // https://docs.aws.amazon.com/cdk/api/latest/typescript/api/aws-apigateway/passthroughbehavior.html#aws_apigateway_PassthroughBehavior
         passthroughBehavior: apigateway.PassthroughBehavior.WHEN_NO_MATCH,
         requestTemplates: {
-          "application/json": '$input.json("$")'
-        }
+          "application/json": '$input.json("$")',
+        },
       }
     );
     greetingResource.addMethod("POST", putGreetingItemIntegration, {
-      methodResponses: [{ statusCode: "200" }]
+      methodResponses: [{ statusCode: "200" }],
     });
   }
 }

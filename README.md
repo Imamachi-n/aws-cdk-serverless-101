@@ -73,4 +73,54 @@ All dependencies match the latest package versions :)
 yarn global upgrade aws-cdk@1.24.0
 ```
 
-## AWS へのデプロイ
+## AWS CloudFormation のテンプレートを確認
+
+```bash
+cdk synth
+```
+
+## AWS へ AWS CDK アプリをデプロイ
+
+### 初回のみ
+
+対象の AWS CDK アプリを初めて AWS の環境にデプロイする場合、ブートストラップスタック（bootstrap stack）をインストールする必要があります。例えば、CloudFormation のテンプレートファイルを S3 バケットに保存するなど、デプロイのオペレーションに必要なものを用意してくれます。
+
+```bash
+$ cdk bootstrap
+ ⏳  Bootstrapping environment aws://123456789001/ap-northeast-1...
+CDKToolkit: creating CloudFormation changeset...
+ 0/2 | 1:45:42 PM | CREATE_IN_PROGRESS   | AWS::S3::Bucket | StagingBucket
+ 0/2 | 1:45:44 PM | CREATE_IN_PROGRESS   | AWS::S3::Bucket | StagingBucket Resource creation Initiated
+ 1/2 | 1:46:06 PM | CREATE_COMPLETE      | AWS::S3::Bucket | StagingBucket
+ 2/2 | 1:46:08 PM | CREATE_COMPLETE      | AWS::CloudFormation::Stack | CDKToolkit
+ ✅  Environment aws://123456789001/ap-northeast-1 bootstrapped.
+```
+
+### AWS へのデプロイ
+
+```bash
+cdk deploy
+This deployment will make potentially sensitive changes according to your current security approval level (--require-approval broadening).
+Please confirm you intend to make the following modifications:
+
+...
+
+ ✅  AwsCdkServerless101Stack
+
+Outputs:
+AwsCdkServerless101Stack.greetingApiEndpoint2C291B85 = https://xxxxxe7y5j.execute-api.ap-northeast-1.amazonaws.com/prod/
+
+...
+```
+
+### AWC CDK アプリの削除
+
+```bash
+$ cdk destroy
+Are you sure you want to delete: AwsCdkServerless101Stack (y/n)? y
+AwsCdkServerless101Stack: destroying...
+
+...
+
+ ✅  AwsCdkServerless101Stack: destroyed
+```
